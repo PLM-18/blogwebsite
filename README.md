@@ -1,4 +1,4 @@
-# IMY 210 - Blog Website Project
+# Blog Website Project
 
 ## Project Overview
 This project involves creating a blog website using NuxtJS for the frontend and Strapi for the backend content management. The website will feature a homepage with blog posts, a search functionality, and individual blog post pages. The application will be containerized using Docker and hosted on GitHub.
