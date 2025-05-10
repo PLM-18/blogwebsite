@@ -46,11 +46,11 @@ The project will consist of the following key components:
 ## How to Run the Project
 1. **Clone the Repository**:
    ```bash
-   git clone <your-github-repo-link>
+   git clone git@github.com:PLM-18/blogwebsite.git
    ```
 2. **Navigate to the Project Directory**:
    ```bash
-   cd <project-folder>
+   cd blogwebsite
    ```
 3. **Run Docker Containers**:
    - For NuxtJS:
