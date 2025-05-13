@@ -3,13 +3,38 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
 
+  modules: [
+    '@nuxtjs/tailwindcss',
+    [
+      '@nuxtjs/color-mode',
+      {
+        classSuffix: '',
+        preference: 'system', // default value of $colorMode.preference
+        fallback: 'light', // fallback value if not system preference found
+      }
+    ],
+    '@nuxt/eslint'
+  ],
   runtimeConfig: {
-    strapiApiToken: process.env.STRAPI_API_TOKEN,
-    strapiApiUrl: process.env.STRAPI_API_URL, 
+    // Private keys (server-side only)
+    // Public keys that are exposed to the client
     public: {
-      // Any variables here will be exposed to the client-side (not recommended for the API token)
+      strapiBaseUrl: process.env.STRAPI_API_URL || 'http://localhost:1337',
+      strapiApiToken: process.env.STRAPI_API_TOKEN || '',
     }
   },
-
-  modules: ['@nuxt/eslint'],
+  app: {
+    // Default head tags
+    head: {
+      title: 'Blog Platform',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'description', content: 'A blog platform built with Nuxt and Strapi' },
+      ],
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      ],
+    }
+  },
 })
