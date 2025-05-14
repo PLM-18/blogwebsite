@@ -52,27 +52,19 @@ The project will consist of the following key components:
    ```bash
    cd blogwebsite
    ```
-3. **Run Docker Containers**:
+3. **Run Components**:
    - For NuxtJS:
      ```bash
-      docker build -t nuxtjs-frontend .
-      docker run -p 3000:3000 nuxt-frontend
+      cd frontend
+      npm run dev
      ```
    - For Strapi:
      ```bash
-     docker build -t strapi-backend .
-     docker build -t strapi-app
+     cd backend
+     npm run dev
      ```
 4. **Access the Application**:
    - Frontend: `http://localhost:3000`
    - Backend (Strapi Admin): `http://localhost:1337/admin`
 
-## Reflection
-A brief reflection (200–300 words) will be included in the submission, detailing the experience with Docker and Strapi, challenges faced, and lessons learned. The reflection will also include the GitHub repository link and Docker commands.
-
-## Submission
-- Compress all project files (excluding `node_modules` and `.env`) into `A3.zip`.
-- Submit the ZIP file to the provided ClickUP link.
-
----  
-**University of Pretoria | IMY 210: Advanced Markup Languages | 2025**
+---
