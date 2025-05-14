@@ -2,7 +2,6 @@
   <div class="container mx-auto p-4">
     <h1 class="text-3xl font-bold mb-6">Search</h1>
     
-    <!-- Search Form -->
     <div class="mb-8">
       <div class="flex flex-col md:flex-row gap-4">
         <div class="flex-grow">
@@ -155,13 +154,13 @@ async function searchPosts() {
     
     searchResults.value.posts = data.data.map(post => ({
       id: post.id,
-      title: post.attributes.title,
-      slug: post.attributes.slug,
-      content: post.attributes.content,
-      publishedAt: post.attributes.publishedAt,
-      authors: post.attributes.authors?.data?.map(author => ({
+      title: post.title,
+      slug: post.slug,
+      content: post.content,
+      publishedAt: post.publishedAt,
+      authors: post.authors?.map(author => ({
         id: author.id,
-        name: author.attributes.name
+        name: author.name
       })) || []
     }))
   } catch (error) {
@@ -180,12 +179,12 @@ async function searchAuthors() {
     
     searchResults.value.authors = data.data.map(author => ({
       id: author.id,
-      name: author.attributes.name,
-      bio: author.attributes.bio,
-      posts: author.attributes.blog_posts?.data?.map(post => ({
+      name: author.name,
+      bio: author.bio,
+      posts: author.blog_posts?.data?.map(post => ({
         id: post.id,
-        title: post.attributes.title,
-        slug: post.attributes.slug
+        title: post.title,
+        slug: post.slug
       })) || []
     }))
   } catch (error) {

@@ -30,10 +30,11 @@ function toggleDarkMode() {
 <style scoped>
 .navbar {
   transition: background-color 0.3s ease;
+  border-bottom: 1px solid #0f0937;
 }
 
 .navbar.is-dark {
-  background-color: #222;
+  background-color: #0c0c0c;
   color: white;
 }
 
