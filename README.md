@@ -55,13 +55,13 @@ The project will consist of the following key components:
 3. **Run Docker Containers**:
    - For NuxtJS:
      ```bash
-     docker build -t nuxt-app -f Dockerfile.nuxt .
-     docker run -p 3000:3000 nuxt-app
+      docker build -t nuxtjs-frontend .
+      docker run -p 3000:3000 nuxt-frontend
      ```
    - For Strapi:
      ```bash
-     docker build -t strapi-app -f Dockerfile.strapi .
-     docker run -p 1337:1337 strapi-app
+     docker build -t strapi-backend .
+     docker build -t strapi-app
      ```
 4. **Access the Application**:
    - Frontend: `http://localhost:3000`
