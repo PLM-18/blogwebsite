@@ -1,9 +1,15 @@
 <template>
   <nav class="navbar p-4" :class="{ 'is-dark': isDark }">
     <div class="container mx-auto flex justify-between items-center">
-      <NuxtLink to="/" class="text-xl font-bold">Blog Platform</NuxtLink>
-      <div class="flex items-center">
-        <button @click="toggleDarkMode" class="p-2 rounded-full">
+      <div class="flex items-center gap-4">
+        <NuxtLink to="/" class="text-xl font-bold">Blog Platform</NuxtLink>
+        <div class="hidden sm:flex gap-4">
+          <NuxtLink to="/" class="hover:underline">Home</NuxtLink>
+          <NuxtLink to="/search" class="hover:underline">Search</NuxtLink>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <button @click="toggleDarkMode" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
           <span v-if="isDark">🌞</span>
           <span v-else>🌙</span>
         </button>
@@ -29,5 +35,9 @@ function toggleDarkMode() {
 .navbar.is-dark {
   background-color: #222;
   color: white;
+}
+
+a.router-link-active {
+  font-weight: bold;
 }
 </style>
