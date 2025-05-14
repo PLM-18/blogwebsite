@@ -10,7 +10,7 @@
         @change="filterByCategory"
         class="border rounded p-2 w-full md:w-64 bg-white dark:bg-gray-800 dark:border-gray-700"
       >
-        <option value="">All Categories</option>
+        <option value="">All</option>
         <option v-for="category in categories" :key="category.id" :value="category.id">
           {{ category.name }}
         </option>
@@ -70,7 +70,6 @@ const categories = ref([])
 const loading = ref(true)
 const selectedCategory = ref('')
 
-// Fetch categories and posts on page load
 onMounted(async () => {
   try {
     await fetchCategories()
@@ -82,7 +81,6 @@ onMounted(async () => {
   }
 })
 
-// Fetch all categories
 async function fetchCategories() {
   try {
     const response = await fetch('http://localhost:1337/api/categories?populate=*')
@@ -97,34 +95,33 @@ async function fetchCategories() {
   }
 }
 
-// Fetch posts with optional category filter
 async function fetchPosts() {
   loading.value = true
   try {
-    let url = 'http://localhost:1337/api/blog-posts?populate[authors][populate]=*&populate[category]=*&populate=*'
-    
-    if (selectedCategory.value) {
-      url += `&filters[category][id]=${selectedCategory.value}`
+    let url = 'http://localhost:1337/api/blog-posts?&populate=category&populate=authors'
+
+    if (selectedCategory.value && selectedCategory.value !== 'All') {
+      url += `&filters[category][id][$eq]=${selectedCategory.value}`
     }
-    
+
     const response = await fetch(url)
     const data = await response.json()
-    
+
     posts.value = data.data.map(post => ({
       id: post.id,
-      title: post.attributes.title,
-      slug: post.attributes.slug,
-      content: post.attributes.content,
-      publishedAt: post.attributes.publishedAt,
-      authors: post.attributes.authors?.data?.map(author => ({
+      title: post.title,
+      slug: post.slug,
+      content: post.content,
+      publishedAt: post.publishedAt,
+      authors: post.authors?.map(author => ({
         id: author.id,
-        name: author.attributes.name
+        name: author.name
       })) || [],
-      category: post.attributes.category?.data ? {
-        id: post.attributes.category.data.id,
-        name: post.attributes.category.data.attributes.name,
-        slug: post.attributes.category.data.attributes.slug
-      } : null
+      category: post.category?.map(category => ({
+        id: category.id,
+        name: category.name,
+        slug: category.slug
+      })) || null
     }))
   } catch (error) {
     console.error('Error fetching posts:', error)
@@ -134,26 +131,20 @@ async function fetchPosts() {
   }
 }
 
-// Filter posts by category
 function filterByCategory() {
   fetchPosts()
 }
 
-// Format author names for display
 function authorNames(authors) {
   if (!authors || !authors.length) return 'Unknown'
   return authors.map(author => author.name).join(', ')
 }
 
-// Get a snippet of the content for preview
 function getContentSnippet(content) {
   if (!content) return 'No content available'
   
-  // For rich text content stored as blocks, try to extract text
   if (typeof content === 'object') {
-    // This assumes a certain structure - adjust based on your actual data
     try {
-      // Look for the first text block
       const firstTextBlock = Array.isArray(content) 
         ? content.find(block => block.type === 'paragraph' || block.children)
         : content
@@ -170,17 +161,15 @@ function getContentSnippet(content) {
         }
       }
       
-      return text ? `${text.substring(0, 150)}${text.length > 150 ? '...' : ''}` : 'No content available'
+      return text ? `${text.substring(0, 80)}${text.length > 80 ? '...' : ''}` : 'No content available'
     } catch (e) {
       return 'Content preview unavailable'
     }
   }
-  
-  // For plain text content
-  return `${content.substring(0, 150)}${content.length > 150 ? '...' : ''}`
+
+  return `${content.substring(0, 80)}${content.length > 80 ? '...' : ''}`
 }
 
-// Format date for display
 function formatDate(dateString) {
   if (!dateString) return ''
   const date = new Date(dateString)
