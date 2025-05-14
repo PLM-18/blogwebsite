@@ -39,9 +39,7 @@
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white"></div>
     </div>
     
-    <!-- Results -->
     <div v-else>
-      <!-- Post Results -->
       <div v-if="searchResults.posts.length > 0" class="mb-8">
         <h2 class="text-2xl font-semibold mb-4">Posts</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -67,7 +65,6 @@
         </div>
       </div>
       
-      <!-- Author Results -->
       <div v-if="searchResults.authors.length > 0" class="mb-8">
         <h2 class="text-2xl font-semibold mb-4">Authors</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -94,7 +91,6 @@
         </div>
       </div>
       
-      <!-- No Results State -->
       <div v-if="!searchResults.posts.length && !searchResults.authors.length && searchPerformed" class="text-center py-12">
         <p class="text-xl text-gray-600 dark:text-gray-300">
           No results found for "{{ searchQuery }}".
@@ -115,7 +111,6 @@ const searchResults = ref({
   authors: []
 })
 
-// Perform search when search button is clicked
 async function performSearch() {
   if (!searchQuery.value.trim()) return
   
@@ -127,12 +122,10 @@ async function performSearch() {
   }
   
   try {
-    // Search for posts if selected type is 'all' or 'posts'
     if (searchType.value === 'all' || searchType.value === 'posts') {
       await searchPosts()
     }
     
-    // Search for authors if selected type is 'all' or 'authors'
     if (searchType.value === 'all' || searchType.value === 'authors') {
       await searchAuthors()
     }
@@ -143,39 +136,39 @@ async function performSearch() {
   }
 }
 
-// Search for posts matching the query
 async function searchPosts() {
   try {
-    const query = searchQuery.value.trim()
-    const url = `http://localhost:1337/api/blog-posts?populate[authors][populate]=*&populate[category]=*&populate=*&filters[$or][0][title][$containsi]=${query}`
-    
-    const response = await fetch(url)
-    const data = await response.json()
-    
+    const searchTerm = searchQuery.value.trim();
+    const url = `http://localhost:1337/api/blog-posts?populate=category&populate=authors&filters[$or][0][title][$contains]=${searchTerm}&filters[$or][1][authors][name][$contains]=${searchTerm}`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
     searchResults.value.posts = data.data.map(post => ({
       id: post.id,
       title: post.title,
       slug: post.slug,
       content: post.content,
       publishedAt: post.publishedAt,
-      authors: post.authors?.map(author => ({
+      category: post.category?.data?.attributes?.name || null,
+      authors: post.authors?.data?.map(author => ({
         id: author.id,
-        name: author.name
-      })) || []
-    }))
+        name: author.name,
+      })) || [],
+    }));
   } catch (error) {
-    console.error('Error searching posts:', error)
+    console.error('Error searching posts:', error);
   }
 }
 
-// Search for authors matching the query
 async function searchAuthors() {
   try {
-    const query = searchQuery.value.trim()
-    const url = `http://localhost:1337/api/authors?populate[blog_posts][populate]=*&filters[name][$containsi]=${query}`
+    const authorname = searchQuery.value.trim()
+    const url = `http://localhost:1337/api/authors?&filters[name][$contains]=${authorname}`
     
     const response = await fetch(url)
     const data = await response.json()
+    console.log('Authors data:', data)
     
     searchResults.value.authors = data.data.map(author => ({
       id: author.id,
@@ -192,20 +185,16 @@ async function searchAuthors() {
   }
 }
 
-// Format author names for display
 function authorNames(authors) {
   if (!authors || !authors.length) return 'Unknown'
   return authors.map(author => author.name).join(', ')
 }
 
-// Get a snippet of the content for preview
 function getContentSnippet(content) {
   if (!content) return 'No content available'
   
-  // For rich text content stored as blocks, try to extract text
   if (typeof content === 'object') {
     try {
-      // Look for the first text block
       const firstTextBlock = Array.isArray(content) 
         ? content.find(block => block.type === 'paragraph' || block.children)
         : content
@@ -222,13 +211,12 @@ function getContentSnippet(content) {
         }
       }
       
-      return text ? `${text.substring(0, 150)}${text.length > 150 ? '...' : ''}` : 'No content available'
+      return text ? `${text.substring(0, 80)}${text.length > 80 ? '...' : ''}` : 'No content available'
     } catch (e) {
       return 'Content preview unavailable'
     }
   }
   
-  // For plain text content
-  return `${content.substring(0, 150)}${content.length > 150 ? '...' : ''}`
+  return `${content.substring(0, 80)}${content.length > 80 ? '...' : ''}`
 }
 </script>

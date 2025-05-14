@@ -5,6 +5,7 @@
         <NuxtLink to="/" class="text-xl font-bold">Blog Platform</NuxtLink>
         <div class="hidden sm:flex gap-4">
           <NuxtLink to="/" class="hover:underline">Home</NuxtLink>
+          <NuxtLink to="/posts" class="hover:underline">Posts</NuxtLink>
           <NuxtLink to="/search" class="hover:underline">Search</NuxtLink>
         </div>
       </div>
