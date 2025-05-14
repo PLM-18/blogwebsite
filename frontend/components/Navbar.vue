@@ -1,3 +1,4 @@
+<!-- u23629810, Philemon -->
 <template>
   <nav class="navbar p-4" :class="{ 'is-dark': isDark }">
     <div class="container mx-auto flex justify-between items-center">
