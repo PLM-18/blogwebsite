@@ -1,6 +1,10 @@
 <template>
   <div>
-    <NuxtRouteAnnouncer />
-    <NuxtWelcome />
+    <Navbar />
+    <NuxtPage />
   </div>
 </template>
+
+<script setup>
+// App entry point
+</script>
