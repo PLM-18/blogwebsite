@@ -125,7 +125,7 @@ watch(() => route.params.slug, async (newSlug) => {
 
 async function fetchPost(slug) {
   try {
-    const response = await fetch(`http://localhost:1337/api/blog-posts?filters[slug][$eq]=${slug}&populate=category&populate=authors`)
+    const response = await fetch(`${strapiUrl}/api/blog-posts?filters[slug][$eq]=${slug}&populate=category&populate=authors`)
     const data = await response.json()
     
     if (data.data && data.data.length > 0) {
@@ -157,7 +157,7 @@ async function fetchPost(slug) {
 
 async function fetchAllPosts() {
   try {
-    const response = await fetch('http://localhost:1337/api/blog-posts?populate=category&populate=authors')
+    const response = await fetch(`${strapiUrl}/api/blog-posts?populate=category&populate=authors`)
     const data = await response.json()
 
     posts.value = data.data.map(post => ({

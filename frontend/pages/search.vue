@@ -102,6 +102,8 @@
 </template>
 
 <script setup>
+const config = useRuntimeConfig()
+const strapiUrl = config.public.strapiUrl
 const searchQuery = ref('')
 const searchType = ref('all')
 const loading = ref(false)
@@ -139,7 +141,7 @@ async function performSearch() {
 async function searchPosts() {
   try {
     const searchTerm = searchQuery.value.trim();
-    const url = `http://localhost:1337/api/blog-posts?populate=category&populate=authors&filters[$or][0][title][$contains]=${searchTerm}&filters[$or][1][authors][name][$contains]=${searchTerm}`;
+    const url = `${strapiUrl}/api/blog-posts?populate=category&populate=authors&filters[$or][0][title][$contains]=${searchTerm}&filters[$or][1][authors][name][$contains]=${searchTerm}`;
 
     const response = await fetch(url);
     const data = await response.json();
@@ -164,7 +166,7 @@ async function searchPosts() {
 async function searchAuthors() {
   try {
     const authorname = searchQuery.value.trim()
-    const url = `http://localhost:1337/api/authors?&filters[name][$contains]=${authorname}`
+    const url = `${strapiUrl}/api/authors?&filters[name][$contains]=${authorname}`
     
     const response = await fetch(url)
     const data = await response.json()

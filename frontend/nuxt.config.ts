@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   ], '@nuxt/eslint', '@nuxtjs/color-mode'],
   runtimeConfig: {
     public: {
-      strapiBaseUrl: process.env.STRAPI_API_URL || 'http://localhost:1337'
+     strapiUrl: process.env.STRAPI_URL || 'http://localhost:1337'
     }
   },
   app: {

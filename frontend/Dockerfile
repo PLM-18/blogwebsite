@@ -1,26 +1,22 @@
-FROM node:18-alpine as build
+FROM node:18-alpine
 
+# Set working directory
 WORKDIR /app
 
+# Install dependencies
 COPY package*.json ./
+RUN npm install
 
-RUN npm install --production --legacy-peer-deps
-
+# Copy the rest of the application
 COPY . .
 
+# Build the application
 RUN npm run build
 
-# -- Production
-FROM nginx:alpine
+# Expose the port NuxtJS will run on
+ENV PORT=3000
+EXPOSE 3000
 
+ENV STRAPI_URL=http://strapi:1337
 
-RUN rm /etc/nginx/conf.d/default.conf
-
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Copy nginx config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "run", "start"]

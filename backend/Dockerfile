@@ -1,31 +1,26 @@
-FROM node:18-alpine AS builder
-
-WORKDIR /app
-
-COPY package*.json ./
-
-RUN npm install --production --legacy-peer-deps
-
-COPY . .
-
-RUN npm run build
-
-# -- Production
 FROM node:18-alpine
 
+# Set working directory
 WORKDIR /app
 
-COPY --from=builder /app/build ./build
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/config ./config
-COPY --from=builder /app/database ./database
-COPY --from=builder /app/dist ./dist 
-COPY --from=builder /app/src ./src
+# Install dependencies
+RUN apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev vips-dev git python3
 
-ENV NODE_ENV=production
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application
+COPY . .
+
+# Build the application
+RUN npm run build
+
+# Expose the port Strapi will run on
+ENV PORT=1337
 EXPOSE 1337
-ENV HOST 0.0.0.0
 
-CMD ["npm", "start"]
+# Start Strapi
+CMD ["npm", "run", "start"]

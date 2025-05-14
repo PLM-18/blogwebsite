@@ -87,6 +87,8 @@
 </template>
 
 <script setup>
+const config = useRuntimeConfig()
+const strapiUrl = config.public.strapiUrl
 const route = useRoute()
 const posts = ref([])
 const post = ref(null)
@@ -108,7 +110,6 @@ onMounted(async () => {
   }
 })
 
-// Watch for route changes
 watch(() => route.params.slug, async (newSlug) => {
   loading.value = true
   try {
@@ -128,7 +129,7 @@ watch(() => route.params.slug, async (newSlug) => {
 
 async function fetchPost(slug) {
   try {
-    const response = await fetch(`http://localhost:1337/api/blog-posts?filters[slug][$eq]=${slug}&populate=category&populate=authors`)
+    const response = await fetch(`${strapiUrl}/api/blog-posts?filters[slug][$eq]=${slug}&populate=category&populate=authors`)
     const data = await response.json()
     
     if (data.data && data.data.length > 0) {
@@ -160,7 +161,7 @@ async function fetchPost(slug) {
 
 async function fetchAllPosts() {
   try {
-    const response = await fetch('http://localhost:1337/api/blog-posts?populate=category&populate=authors')
+    const response = await fetch(`${strapiUrl}/api/blog-posts?populate=category&populate=authors`)
     const data = await response.json()
 
     posts.value = data.data.map(post => ({
@@ -223,11 +224,8 @@ function getContentSnippet(content) {
 function renderContent(content) {
   if (!content) return 'No content available'
   
-  // Handle various content formats
   if (typeof content === 'object') {
     try {
-      // For structured content (e.g. from a rich text editor)
-      // This is a simplified version - in a real app you might need a more sophisticated renderer
       if (Array.isArray(content)) {
         return content.map(block => {
           if (block.children) {
@@ -245,7 +243,6 @@ function renderContent(content) {
     }
   }
   
-  // For plain text content
   return content
 }
 

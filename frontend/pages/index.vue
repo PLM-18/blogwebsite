@@ -63,6 +63,8 @@
 </template>
 
 <script setup>
+const config = useRuntimeConfig()
+const strapiUrl = config.public.strapiUrl
 const posts = ref([])
 const categories = ref([])
 const loading = ref(true)
@@ -81,7 +83,7 @@ onMounted(async () => {
 
 async function fetchCategories() {
   try {
-    const response = await fetch('http://localhost:1337/api/categories?populate=*')
+    const response = await fetch(`${strapiUrl}/api/categories?populate=*`)
     const data = await response.json()
     categories.value = data.data.map(category => ({
       id: category.id,
@@ -96,7 +98,7 @@ async function fetchCategories() {
 async function fetchPosts() {
   loading.value = true
   try {
-    let url = 'http://localhost:1337/api/blog-posts?&populate=category&populate=authors'
+    let url = `${strapiUrl}/api/blog-posts?&populate=category&populate=authors`
 
     if (selectedCategory.value && selectedCategory.value !== 'All') {
       url += `&filters[category][id][$eq]=${selectedCategory.value}`
