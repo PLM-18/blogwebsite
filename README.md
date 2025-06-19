@@ -20,19 +20,6 @@ This project involves creating a blog website using NuxtJS for the frontend and 
   - Markdown support for blog content.
 - **Setup**: Follow the [Strapi quick start guide](https://docs.strap.io/dev-docs/quick-start).
 
-### 3. **Docker**
-- **Purpose**: Containerizes both the NuxtJS and Strapi applications for easy deployment and scalability.
-- **Features**:
-  - Separate Dockerfiles for NuxtJS and Strapi.
-  - Environment variable management for configuration.
-- **Setup**: Dockerfiles will be provided in the project repository.
-
-### 4. **GitHub**
-- **Purpose**: Hosts the codebase and tracks version control.
-- **Requirements**:
-  - At least 3 commits to demonstrate consistent progress.
-  - Exclude `.env` files from the repository.
-
 ## Project Structure
 The project will consist of the following key components:
 - **Frontend (NuxtJS)**:
